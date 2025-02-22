@@ -34,14 +34,14 @@ const gameBoard = function () {
 
     for (let i = 0; i < rows; i++) {
         for (let j = board[i].length; j < columns; j++) {
-            board[i].push("");
+            board[i].push(createSquare());
         }
     }
 
     const resetBoard = () => {
         for (let i = 0; i < rows; i++) {
             for (let j = 0; j < columns; j++) {
-                board[i][j] = "";
+                board[i][j] = createSquare();
             }
         }
     }
@@ -50,15 +50,15 @@ const gameBoard = function () {
 
     const getSquare = (row, column) => board[row][column];
 
-    const occupySquare = (row, column, symbol) => {
-        board[row][column] = symbol;
+    const occupySquare = (row, column, player) => {
+        board[row][column].setOccupant(player);
     };
 
     const displayBoard = () => {
         let boardDisplay = ""
         for (let i = 0; i < rows; i++) {
             for (let j = 0; j < columns; j++) {
-                boardDisplay += "[" + board[i][j] + "]";
+                boardDisplay += "[" + board[i][j].getSymbol() + "]";
             }
             boardDisplay += "\n";
         }
@@ -69,7 +69,24 @@ const gameBoard = function () {
     return { resetBoard, getBoard, getSquare, occupySquare, displayBoard };
 }
 
+function createSquare() {
+    let occupant = null;
+
+    const getSymbol = () => {
+        return occupant ? occupant.getSymbol() : "";
+    };
+
+    const setOccupant = (selOccupant) => {
+        occupant = selOccupant;
+    }
+
+    const getOccupant = () => occupant;
+
+    return { getSymbol, setOccupant, getOccupant };
+}
+
 function createPlayer(name, symbol) {
+
     const getName = () => name;
 
     const getSymbol = () => symbol;
@@ -96,10 +113,21 @@ const game = (function (selPlayer1 = "Player 1", selPlayer2 = "Player 2") {
 
     const playRound = (row, column) => {
         console.log(`${getCurrentPlayer().getName()} selects cell (${row}, ${column})`)
-        board.occupySquare(row, column, getCurrentPlayer().getSymbol());
+        board.occupySquare(row, column, getCurrentPlayer());
 
         changeTurn();
         displayNewRound();
+    }
+
+    const evalGame = () => {
+        // Board Check winner in rows
+        // Board Check winner in column
+        // Board Check winner in diagonals
+        // Any winner ?
+        // If winner -> end (announce winner, end)
+        // If no winner -> // Check if there are still available squares
+        // Still available squares -> playRound
+        // No available squares -> (announce draw, end)
     }
 
     const displayNewRound = () => {
