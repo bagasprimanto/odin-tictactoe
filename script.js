@@ -18,6 +18,14 @@
 const gameBoard = (function () {
     const board = [["", "", ""], ["", "", ""], ["", "", ""]];
 
+    const initializeBoard = () => {
+        for (let i = 0; i < board.length; i++) {
+            for (let j = 0; j < board[i].length; j++) {
+                board[i][j] = "";
+            }
+        }
+    }
+
     const getBoard = () => board;
 
     const getSquare = (row, column) => board[row][column];
@@ -26,20 +34,16 @@ const gameBoard = (function () {
         board[row][column] = symbol;
     };
 
-    return { getBoard, getSquare, setSquare };
+    return { initializeBoard, getBoard, getSquare, setSquare };
 })();
 
 function createPlayer(name, symbol) {
 
-    const getName = function () {
-        return name;
-    }
+    const getName = () => name;
 
-    const getSymbol = function () {
-        return symbol;
-    }
+    const getSymbol = () => symbol;
 
-    const selectSquare = function (row, column) {
+    const selectSquare = (row, column) => {
         gameBoard.setSquare(row, column, symbol);
     }
 
