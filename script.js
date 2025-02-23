@@ -304,7 +304,6 @@ const displayController = (function () {
                 restartButton.style.display = "none";
             } else {
                 game.start();
-                updateDisplay();
                 playButton.style.display = "none";
             }
         }
