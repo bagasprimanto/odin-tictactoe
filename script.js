@@ -176,6 +176,8 @@ function createGame(selPlayer1 = "Player 1", selPlayer2 = "Player 2") {
 
     const getBoard = () => board.getBoard();
 
+    const getIsPlay = () => isPlay;
+
     const changeTurn = () => {
         currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
     }
@@ -232,12 +234,13 @@ function createGame(selPlayer1 = "Player 1", selPlayer2 = "Player 2") {
 
     displayNewRound();
 
-    return { playRound, displayNewRound, getCurrentPlayer, evaluate, restart, getBoard };
+    return { playRound, getCurrentPlayer, restart, getBoard, getIsPlay };
 
 }
 
 const displayController = (function () {
     const game = createGame();
+    const turnDiv = document.querySelector(".current-player");
     const playerSpan = document.querySelector(".player");
     const boardDiv = document.querySelector(".board");
 
@@ -261,7 +264,11 @@ const displayController = (function () {
         })
 
         // Display the current player
-        playerSpan.textContent = game.getCurrentPlayer().getName();
+        if (game.getIsPlay()) {
+            playerSpan.textContent = game.getCurrentPlayer().getName();
+        } else {
+            turnDiv.textContent = `${game.getCurrentPlayer().getName()} wins! Game has ended.`
+        }
     }
 
     const clickHandler = (event) => {
