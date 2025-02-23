@@ -168,13 +168,9 @@ function createGame(selPlayer1 = "Player 1", selPlayer2 = "Player 2") {
     const players = [];
     const board = gameBoard();
     let winner = null;
-    let isPlay = true;
+    let isPlay;
 
-    const player1 = createPlayer(selPlayer1, "O");
-    const player2 = createPlayer(selPlayer2, "X");
-    players.push(player1, player2);
-
-    let currentPlayer = players[0];
+    let currentPlayer;
 
     const getCurrentPlayer = () => currentPlayer;
 
@@ -183,6 +179,15 @@ function createGame(selPlayer1 = "Player 1", selPlayer2 = "Player 2") {
     const getIsPlay = () => isPlay;
 
     const getWinner = () => winner;
+
+    const start = () => {
+        isPlay = true;
+        const player1 = createPlayer(selPlayer1, "O");
+        const player2 = createPlayer(selPlayer2, "X");
+        players.push(player1, player2);
+        currentPlayer = players[0];
+        displayNewRound();
+    };
 
     const changeTurn = () => {
         currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
@@ -240,9 +245,7 @@ function createGame(selPlayer1 = "Player 1", selPlayer2 = "Player 2") {
         console.log(`Current player: ${getCurrentPlayer().getName()}`);
     }
 
-    displayNewRound();
-
-    return { playRound, getCurrentPlayer, restart, getBoard, getIsPlay, getWinner };
+    return { playRound, getCurrentPlayer, start, restart, getBoard, getIsPlay, getWinner };
 
 }
 
@@ -251,6 +254,7 @@ const displayController = (function () {
     const turnDiv = document.querySelector(".player");
     const boardDiv = document.querySelector(".board");
     const restartButton = document.querySelector(".restart-btn");
+    const playButton = document.querySelector(".start-btn");
 
     const updateDisplay = () => {
         //Clear the board
@@ -295,17 +299,22 @@ const displayController = (function () {
 
             game.playRound(rowIndex, colIndex);
         } else {
-            game.restart(); // Restart the game
-            restartButton.style.display = "none";
+            if (event.target.getAttribute("class") === "restart-btn") {
+                game.restart(); // Restart the game
+                restartButton.style.display = "none";
+            } else {
+                game.start();
+                updateDisplay();
+                playButton.style.display = "none";
+            }
         }
         updateDisplay();
     }
 
     boardDiv.addEventListener("click", clickHandler);
     restartButton.addEventListener("click", clickHandler);
+    playButton.addEventListener("click", clickHandler);
     restartButton.style.display = "none";
-
-    updateDisplay();
 
     return { updateDisplay };
 })()

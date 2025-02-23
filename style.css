@@ -129,7 +129,8 @@ body {
     background-color: rgb(250, 236, 221);
 }
 
-.restart {
+.restart,
+.start {
     display: flex;
     justify-content: center;
 }
