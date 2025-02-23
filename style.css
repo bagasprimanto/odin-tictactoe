@@ -107,11 +107,8 @@ body {
     row-gap: 8px;
 }
 
-.game .current-player {
+.game .player {
     font-size: 1.2rem;
-}
-
-.game .current-player .player {
     font-weight: 900;
 }
 
@@ -130,4 +127,9 @@ body {
     aspect-ratio: 1 / 1.1;
     width: 120px;
     background-color: rgb(250, 236, 221);
+}
+
+.restart {
+    display: flex;
+    justify-content: center;
 }

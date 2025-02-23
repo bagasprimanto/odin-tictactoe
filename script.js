@@ -248,9 +248,9 @@ function createGame(selPlayer1 = "Player 1", selPlayer2 = "Player 2") {
 
 const displayController = (function () {
     const game = createGame();
-    const turnDiv = document.querySelector(".current-player");
-    const playerSpan = document.querySelector(".player");
+    const turnDiv = document.querySelector(".player");
     const boardDiv = document.querySelector(".board");
+    const restartButton = document.querySelector(".restart-btn");
 
     const updateDisplay = () => {
         //Clear the board
@@ -273,29 +273,37 @@ const displayController = (function () {
 
         // Display the current player
         if (game.getIsPlay()) {
-            playerSpan.textContent = game.getCurrentPlayer().getName();
+            turnDiv.textContent = `${game.getCurrentPlayer().getName()}'s turn `;
         } else {
             if (game.getWinner()) {
                 turnDiv.textContent = `${game.getCurrentPlayer().getName()} wins! Game has ended.`
             } else {
                 turnDiv.textContent = "It's a draw!";
             }
+            restartButton.style.display = "block";
         }
     }
 
     const clickHandler = (event) => {
-        const selectedSquareIndex = event.target.getAttribute("data-attribute");
+        if (game.getIsPlay()) {
+            const selectedSquareIndex = event.target.getAttribute("data-attribute");
 
-        if (!selectedSquareIndex) return;
+            if (!selectedSquareIndex) return;
 
-        const rowIndex = selectedSquareIndex.charAt(0);
-        const colIndex = selectedSquareIndex.charAt(1);
+            const rowIndex = selectedSquareIndex.charAt(0);
+            const colIndex = selectedSquareIndex.charAt(1);
 
-        game.playRound(rowIndex, colIndex);
+            game.playRound(rowIndex, colIndex);
+        } else {
+            game.restart();
+            restartButton.style.display = "none";
+        }
         updateDisplay();
     }
 
     boardDiv.addEventListener("click", clickHandler);
+    restartButton.addEventListener("click", clickHandler);
+    restartButton.style.display = "none";
 
     updateDisplay();
 
