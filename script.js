@@ -52,7 +52,11 @@ const gameBoard = function () {
     const getSquare = (row, column) => board[row][column];
 
     const occupySquare = (row, column, player) => {
-        board[row][column].setOccupant(player);
+        if (!board[row][column].getOccupant()) {
+            board[row][column].setOccupant(player);
+            return true; // If can occupy, return true
+        }
+        return false; // If can't occupy, return false
     };
 
     const displayBoard = () => {
@@ -178,6 +182,8 @@ function createGame(selPlayer1 = "Player 1", selPlayer2 = "Player 2") {
 
     const getIsPlay = () => isPlay;
 
+    const getWinner = () => winner;
+
     const changeTurn = () => {
         currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
     }
@@ -186,12 +192,14 @@ function createGame(selPlayer1 = "Player 1", selPlayer2 = "Player 2") {
         if (isPlay) {
 
             console.log(`${getCurrentPlayer().getName()} selects cell (${row}, ${column})`)
-            board.occupySquare(row, column, getCurrentPlayer());
+            const isOccupy = board.occupySquare(row, column, getCurrentPlayer());
 
-            if (evaluate()) {
+            if (evaluate() && isOccupy) {
                 changeTurn();
                 displayNewRound();
-            } else {
+            }
+
+            if (!evaluate()) {
                 announceResult();
             }
         } else {
@@ -234,7 +242,7 @@ function createGame(selPlayer1 = "Player 1", selPlayer2 = "Player 2") {
 
     displayNewRound();
 
-    return { playRound, getCurrentPlayer, restart, getBoard, getIsPlay };
+    return { playRound, getCurrentPlayer, restart, getBoard, getIsPlay, getWinner };
 
 }
 
@@ -267,7 +275,11 @@ const displayController = (function () {
         if (game.getIsPlay()) {
             playerSpan.textContent = game.getCurrentPlayer().getName();
         } else {
-            turnDiv.textContent = `${game.getCurrentPlayer().getName()} wins! Game has ended.`
+            if (game.getWinner()) {
+                turnDiv.textContent = `${game.getCurrentPlayer().getName()} wins! Game has ended.`
+            } else {
+                turnDiv.textContent = "It's a draw!";
+            }
         }
     }
 
