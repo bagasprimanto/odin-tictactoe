@@ -238,7 +238,7 @@ function createGame(selPlayer1 = "Player 1", selPlayer2 = "Player 2") {
 
 const displayController = (function () {
     const game = createGame();
-    const playerTurn = document.querySelector(".player");
+    const playerSpan = document.querySelector(".player");
     const boardDiv = document.querySelector(".board");
 
     const updateDisplay = () => {
@@ -259,7 +259,24 @@ const displayController = (function () {
                 boardDiv.appendChild(squareButton);
             })
         })
+
+        // Display the current player
+        playerSpan.textContent = game.getCurrentPlayer().getName();
     }
+
+    const clickHandler = (event) => {
+        const selectedSquareIndex = event.target.getAttribute("data-attribute");
+
+        if (!selectedSquareIndex) return;
+
+        const rowIndex = selectedSquareIndex.charAt(0);
+        const colIndex = selectedSquareIndex.charAt(1);
+
+        game.playRound(rowIndex, colIndex);
+        updateDisplay();
+    }
+
+    boardDiv.addEventListener("click", clickHandler);
 
     updateDisplay();
 

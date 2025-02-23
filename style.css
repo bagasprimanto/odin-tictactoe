@@ -127,7 +127,7 @@ body {
     justify-content: center;
     align-items: center;
     font-size: 5rem;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 1 / 1.1;
     width: 120px;
     background-color: rgb(250, 236, 221);
 }
