@@ -128,7 +128,7 @@ const gameBoard = function () {
             }
         }
 
-        return false; // False is no empty squares
+        return false; // False if no empty squares
     }
 
     return { resetBoard, getBoard, getSquare, occupySquare, displayBoard, getWinner, isAvailableSquare };
@@ -198,15 +198,12 @@ const game = (function (selPlayer1 = "Player 1", selPlayer2 = "Player 2") {
     const evaluate = () => {
         // Board Check winner
         winner = board.getWinner();
-        // Any winner ?
-        // If winner -> end (announce winner, end)
+        // If winner or no squares are available -> end (isPlay = false to stop playing) & return false
         if (winner || !board.isAvailableSquare()) {
             isPlay = false;
             return false;
         }
-        // If no winner -> // Check if there are still available squares
-        // No available squares -> (announce draw, end)
-        // Still available squares -> playRound
+        // else, continue by returning true
         return true;
     }
 
