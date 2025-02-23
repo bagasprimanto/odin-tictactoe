@@ -323,5 +323,4 @@ const displayController = function () {
 }
 
 document.querySelector(".restart-btn").style.display = "none";
-
 document.querySelector(".start-btn").addEventListener("click", displayController);
