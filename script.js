@@ -159,7 +159,7 @@ function createPlayer(name, symbol) {
     return { getName, getSymbol };
 }
 
-const game = (function (selPlayer1 = "Player 1", selPlayer2 = "Player 2") {
+function createGame(selPlayer1 = "Player 1", selPlayer2 = "Player 2") {
 
     const players = [];
     const board = gameBoard();
@@ -173,6 +173,8 @@ const game = (function (selPlayer1 = "Player 1", selPlayer2 = "Player 2") {
     let currentPlayer = players[0];
 
     const getCurrentPlayer = () => currentPlayer;
+
+    const getBoard = () => board.getBoard();
 
     const changeTurn = () => {
         currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
@@ -230,10 +232,36 @@ const game = (function (selPlayer1 = "Player 1", selPlayer2 = "Player 2") {
 
     displayNewRound();
 
-    return { playRound, displayNewRound, getCurrentPlayer, evaluate, restart };
+    return { playRound, displayNewRound, getCurrentPlayer, evaluate, restart, getBoard };
 
-})();
+}
 
 const displayController = (function () {
-    // Todo
-})
+    const game = createGame();
+    const playerTurn = document.querySelector(".player");
+    const boardDiv = document.querySelector(".board");
+
+    const updateDisplay = () => {
+        //Clear the board
+        boardDiv.textContent = "";
+
+        // Get the newest version of the board and player turn
+        const board = game.getBoard();
+
+        // Display the state of the board
+        board.forEach((row, rowIndex) => {
+            row.forEach((square, colIndex) => {
+                const squareButton = document.createElement("button");
+                squareButton.classList.add("square");
+                const squareIndex = `${rowIndex}${colIndex}`;
+                squareButton.setAttribute("data-attribute", squareIndex);
+                squareButton.textContent = square.getSymbol();
+                boardDiv.appendChild(squareButton);
+            })
+        })
+    }
+
+    updateDisplay();
+
+    return { updateDisplay };
+})()
