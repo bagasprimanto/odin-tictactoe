@@ -20,8 +20,8 @@ Overall tic tac toe design:
             set player name
             set player symbol
         changeTurn
-        end
         restart
+        announceResult
 */
 
 const gameBoard = function () {
@@ -233,3 +233,7 @@ const game = (function (selPlayer1 = "Player 1", selPlayer2 = "Player 2") {
     return { playRound, displayNewRound, getCurrentPlayer, evaluate, restart };
 
 })();
+
+const displayController = (function () {
+    // Todo
+})
