@@ -280,7 +280,7 @@ const displayController = (function () {
             } else {
                 turnDiv.textContent = "It's a draw!";
             }
-            restartButton.style.display = "block";
+            restartButton.style.display = "block"; // Display the restart button
         }
     }
 
@@ -295,7 +295,7 @@ const displayController = (function () {
 
             game.playRound(rowIndex, colIndex);
         } else {
-            game.restart();
+            game.restart(); // Restart the game
             restartButton.style.display = "none";
         }
         updateDisplay();
