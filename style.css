@@ -134,3 +134,7 @@ body {
     display: flex;
     justify-content: center;
 }
+
+.form-control {
+    margin-bottom: 16px;
+}
