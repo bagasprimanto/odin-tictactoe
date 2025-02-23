@@ -1,4 +1,5 @@
 /*
+Overall tic tac toe design:
     GameBoard
         state:
             board
@@ -179,6 +180,7 @@ const game = (function (selPlayer1 = "Player 1", selPlayer2 = "Player 2") {
 
     const playRound = (row, column) => {
         if (isPlay) {
+
             console.log(`${getCurrentPlayer().getName()} selects cell (${row}, ${column})`)
             board.occupySquare(row, column, getCurrentPlayer());
 
@@ -214,8 +216,14 @@ const game = (function (selPlayer1 = "Player 1", selPlayer2 = "Player 2") {
         } else {
             console.log(`It's a draw!`);
         }
-
         console.log("Game has ended.");
+    }
+
+    const restart = () => {
+        isPlay = true;
+        currentPlayer = players[0];
+        board.resetBoard();
+        displayNewRound();
     }
 
     const displayNewRound = () => {
@@ -225,6 +233,6 @@ const game = (function (selPlayer1 = "Player 1", selPlayer2 = "Player 2") {
 
     displayNewRound();
 
-    return { playRound, displayNewRound, getCurrentPlayer, evaluate };
+    return { playRound, displayNewRound, getCurrentPlayer, evaluate, restart };
 
 })();
