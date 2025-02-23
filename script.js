@@ -120,7 +120,17 @@ const gameBoard = function () {
         return _getWinnerRows() || _getWinnerColumns() || _getWinnerDiagonals();
     }
 
-    return { resetBoard, getBoard, getSquare, occupySquare, displayBoard, getWinner };
+    const isAvailableSquare = () => {
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < columns; j++) {
+                if (board[i][j].getSymbol() === "") return true; // True if there is an empty square
+            }
+        }
+
+        return false; // False is no empty squares
+    }
+
+    return { resetBoard, getBoard, getSquare, occupySquare, displayBoard, getWinner, isAvailableSquare };
 }
 
 function createSquare() {
@@ -152,6 +162,8 @@ const game = (function (selPlayer1 = "Player 1", selPlayer2 = "Player 2") {
 
     const players = [];
     const board = gameBoard();
+    let winner = null;
+    let isPlay = true;
 
     const player1 = createPlayer(selPlayer1, "O");
     const player2 = createPlayer(selPlayer2, "X");
@@ -166,25 +178,44 @@ const game = (function (selPlayer1 = "Player 1", selPlayer2 = "Player 2") {
     }
 
     const playRound = (row, column) => {
-        console.log(`${getCurrentPlayer().getName()} selects cell (${row}, ${column})`)
-        board.occupySquare(row, column, getCurrentPlayer());
+        if (isPlay) {
+            console.log(`${getCurrentPlayer().getName()} selects cell (${row}, ${column})`)
+            board.occupySquare(row, column, getCurrentPlayer());
 
-        changeTurn();
-        displayNewRound();
+            if (evaluate()) {
+                changeTurn();
+                displayNewRound();
+            } else {
+                announceResult();
+            }
+        } else {
+            console.log("Cannot continue playing.");
+        }
     }
 
     const evaluate = () => {
         // Board Check winner
-        if (board.getWinner()) {
-            console.log(board.getWinner().getName());
-        } else {
-            console.log("No winner yet");
-        }
+        winner = board.getWinner();
         // Any winner ?
         // If winner -> end (announce winner, end)
+        if (winner || !board.isAvailableSquare()) {
+            isPlay = false;
+            return false;
+        }
         // If no winner -> // Check if there are still available squares
-        // Still available squares -> playRound
         // No available squares -> (announce draw, end)
+        // Still available squares -> playRound
+        return true;
+    }
+
+    const announceResult = () => {
+        if (winner) {
+            console.log(`The winner is ${winner.getName()}.`);
+        } else {
+            console.log(`It's a draw!`);
+        }
+
+        console.log("Game has ended.");
     }
 
     const displayNewRound = () => {
