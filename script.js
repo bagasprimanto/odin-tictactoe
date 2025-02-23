@@ -87,8 +87,6 @@ const gameBoard = function () {
                 winner = currentOccupant;
             }
         }
-
-
         return winner;
     }
 
@@ -109,54 +107,13 @@ const gameBoard = function () {
     }
 
     const getWinnerDiagonals = () => {
-        let winner;
-        let found = false;
-
         // First diagonal
-        let i = 0;
-        let j = 0;
-        if (board[i][j].getOccupant()) {
-            let currentOccupant = board[i][j].getOccupant();
-            while (i < rows && j < columns) {
-                if (board[i][j].getOccupant() !== currentOccupant) {
-                    break; // Jump out of the current row into the next column
-                } else {
-                    i++;
-                    j++;
-                }
-            }
-            if (i === rows && j === columns) {
-                found = true;
-                winner = currentOccupant;
-            }
-        }
+        let result = _checkDirection(0, 0, 1, 1);
+        if (result) return result;
 
-        // Seond diagonal
-        if (!found) {
-            i = rows - 1; // 2
-            j = 0;
-            if (board[i][j].getOccupant()) {
-                let currentOccupant = board[i][j].getOccupant();
-                while (i >= 0 && j < columns) {
-                    if (board[i][j].getOccupant() !== currentOccupant) {
-                        break; // Jump out of the current row into the next diagonal
-                    } else {
-                        i--;
-                        j++;
-                    }
-                }
-                if (i === -1 && j === columns) {
-                    found = true;
-                    winner = currentOccupant;
-                }
-            }
-        }
-
-        if (found) {
-            return winner;
-        }
-
-        return null;
+        // Second diagonal
+        result = _checkDirection(rows - 1, 0, -1, 1);
+        return result;
     }
 
     return { resetBoard, getBoard, getSquare, occupySquare, displayBoard, getWinnerRows, getWinnerColumns, getWinnerDiagonals };
