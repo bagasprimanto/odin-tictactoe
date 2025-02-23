@@ -90,7 +90,7 @@ const gameBoard = function () {
         return winner;
     }
 
-    const getWinnerRows = () => {
+    const _getWinnerRows = () => {
         for (let i = 0; i < rows; i++) {
             const result = _checkDirection(i, 0, 0, 1);
             if (result) return result;
@@ -98,7 +98,7 @@ const gameBoard = function () {
         return null;
     }
 
-    const getWinnerColumns = () => {
+    const _getWinnerColumns = () => {
         for (let j = 0; j < columns; j++) {
             const result = _checkDirection(0, j, 1, 0);
             if (result) return result;
@@ -106,7 +106,7 @@ const gameBoard = function () {
         return null;
     }
 
-    const getWinnerDiagonals = () => {
+    const _getWinnerDiagonals = () => {
         // First diagonal
         let result = _checkDirection(0, 0, 1, 1);
         if (result) return result;
@@ -116,7 +116,11 @@ const gameBoard = function () {
         return result;
     }
 
-    return { resetBoard, getBoard, getSquare, occupySquare, displayBoard, getWinnerRows, getWinnerColumns, getWinnerDiagonals };
+    const getWinner = () => {
+        return _getWinnerRows() || _getWinnerColumns() || _getWinnerDiagonals();
+    }
+
+    return { resetBoard, getBoard, getSquare, occupySquare, displayBoard, getWinner };
 }
 
 function createSquare() {
@@ -169,18 +173,10 @@ const game = (function (selPlayer1 = "Player 1", selPlayer2 = "Player 2") {
         displayNewRound();
     }
 
-    const evalGame = () => {
-        // Board Check winner in rows
-        if (board.getWinnerRows()) {
-            console.log(board.getWinnerRows().getName());
-        }
-        // Board Check winner in column
-        if (board.getWinnerColumns()) {
-            console.log(board.getWinnerColumns().getName());
-        }
-        // Board Check winner in diagonals
-        if (board.getWinnerDiagonals()) {
-            console.log(board.getWinnerDiagonals().getName());
+    const evaluate = () => {
+        // Board Check winner
+        if (board.getWinner()) {
+            console.log(board.getWinner().getName());
         } else {
             console.log("No winner yet");
         }
@@ -198,6 +194,6 @@ const game = (function (selPlayer1 = "Player 1", selPlayer2 = "Player 2") {
 
     displayNewRound();
 
-    return { playRound, displayNewRound, getCurrentPlayer, evalGame };
+    return { playRound, displayNewRound, getCurrentPlayer, evaluate };
 
 })();
