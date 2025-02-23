@@ -66,55 +66,44 @@ const gameBoard = function () {
         console.log(boardDisplay);
     }
 
-    const getWinnerRows = () => {
-        let winner;
-        let found = false;
-        for (let i = 0; i < rows; i++) {
-            if (board[i][0].getOccupant()) {
-                let currentOccupant = board[i][0].getOccupant();
-                for (let j = 0; j < columns; j++) {
-                    if (board[i][j].getOccupant() !== currentOccupant) {
-                        break; // Jump out of the current row into the next row
-                    }
-                    if (j === columns - 1) {
-                        found = true;
-                        winner = currentOccupant;
-                    }
+    const _checkDirection = (startI, startJ, deltaI, deltaJ) => {
+        let winner = null;
+
+        let i = startI;
+        let j = startJ;
+
+        if (board[i][j].getOccupant()) {
+            let currentOccupant = board[i][j].getOccupant();
+            while (i >= 0 && i < rows && j >= 0 && j < columns) {
+                if (board[i][j].getOccupant() !== currentOccupant) {
+                    break; // Mismatch, stop checking
                 }
-            } else {
-                continue;
+                i += deltaI;
+                j += deltaJ;
+            }
+
+            // Check if we went to the end of the row/column/diagonal
+            if (i === (startI + deltaI * rows) && j === (startJ + deltaJ * columns)) {
+                winner = currentOccupant;
             }
         }
 
-        if (found) {
-            return winner;
-        }
 
+        return winner;
+    }
+
+    const getWinnerRows = () => {
+        for (let i = 0; i < rows; i++) {
+            const result = _checkDirection(i, 0, 0, 1);
+            if (result) return result;
+        }
         return null;
     }
 
     const getWinnerColumns = () => {
-        let winner;
-        let found = false;
         for (let j = 0; j < columns; j++) {
-            if (board[0][j].getOccupant()) {
-                let currentOccupant = board[0][j].getOccupant();
-                for (let i = 0; i < rows; i++) {
-                    if (board[i][j].getOccupant() !== currentOccupant) {
-                        break; // Jump out of the current row into the next column
-                    }
-                    if (i === rows - 1) {
-                        found = true;
-                        winner = currentOccupant;
-                    }
-                }
-            } else {
-                continue;
-            }
-        }
-
-        if (found) {
-            return winner;
+            const result = _checkDirection(0, j, 1, 0);
+            if (result) return result;
         }
         return null;
     }
