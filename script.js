@@ -1,29 +1,3 @@
-/*
-Overall tic tac toe design:
-    GameBoard
-        state:
-            board
-        initialize
-            empty the board
-        getSquare
-        setSquare
-    Player
-        selectSquare
-    Game
-        state:
-            players
-            board
-            currentPlayer
-            isPlay
-        methods:
-        initialize
-            set player name
-            set player symbol
-        changeTurn
-        restart
-        announceResult
-*/
-
 const gameBoard = function () {
     const rows = 3;
     const columns = 3;
