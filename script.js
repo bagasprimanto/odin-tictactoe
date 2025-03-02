@@ -1,12 +1,17 @@
 const gameBoard = function () {
+    // Stores the state and methods regarding the gameboard
+
+    // Sets the state of the board
     const rows = 3;
     const columns = 3;
     const board = []
 
+    // Creates the rows
     for (let i = 0; i < rows; i++) {
         board.push([]);
     }
 
+    // Creates the columns in each row
     for (let i = 0; i < rows; i++) {
         for (let j = board[i].length; j < columns; j++) {
             board[i].push(createSquare());
@@ -33,6 +38,7 @@ const gameBoard = function () {
         return false; // If can't occupy, return false
     };
 
+    // Displays the board on the command line
     const displayBoard = () => {
         let boardDisplay = ""
         for (let i = 0; i < rows; i++) {
@@ -45,6 +51,7 @@ const gameBoard = function () {
         console.log(boardDisplay);
     }
 
+    // Utility function to check for a winner on the board in a direction
     const _checkDirection = (startI, startJ, deltaI, deltaJ) => {
         let winner = null;
 
